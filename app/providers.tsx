@@ -17,7 +17,7 @@ export function Providers(props: { children: ReactNode }) {
   return (
     <DynamicContextProvider
       settings={{
-        environmentId: "2762a57b-faa4-41ce-9f16-abff9300e2c9",
+        environmentId: "8b5a9c2b-267f-459c-b0df-7bff945d25d0",
         walletConnectors: [EthereumWalletConnectors],
       }}
     >

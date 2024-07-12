@@ -1,11 +1,12 @@
 import { http, createConfig } from "wagmi";
-import { mainnet } from "wagmi/chains";
+import { mainnet, arbitrumSepolia } from "wagmi/chains";
 
 export const config = createConfig({
-  chains: [mainnet],
+  chains: [arbitrumSepolia, mainnet],
   multiInjectedProviderDiscovery: false,
   ssr: true,
   transports: {
+    [arbitrumSepolia.id]: http(),
     [mainnet.id]: http(),
   },
 });

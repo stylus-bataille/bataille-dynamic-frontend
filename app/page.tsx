@@ -1,46 +1,45 @@
+import { Button , Box, ButtonGroup, Typography} from "@mui/material";
 import { DynamicWidget } from "../lib/dynamic";
+import ButtonAppBar from "./components/navbar";
+import Image from 'next/image';
+import card from './images/SVG-cards-1.3/10_of_clubs.svg';
+
 
 export default function Main() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black flex flex-col items-center justify-center text-white">
-      <div className="flex flex-col items-center justify-center text-center">
-        <div className="mb-6">
-          <div className="inline-flex items-center justify-center">
-            <img src="/logo.png" alt="logo" />
-          </div>
-        </div>
-        <h1 className="text-4xl font-bold mb-4">Onboard the world</h1>
-        <p className="text-lg mb-16">
-          Web3 login for <span className="text-blue-400">everyone</span>.
-        </p>
-        <DynamicWidget />
-      </div>
-      <div className="flex mt-16 space-x-4 ">
-        <a
-          href="https://docs.dynamic.xyz/"
-          target="_blank"
-          rel="noreferrer"
-          className="p-4 inline-flex items-center justify-center rounded-lg border-2 border-[#3B3636] shadow-lg w-64"
-        >
-          <h2 className="font-semibold">Docs</h2>
-        </a>
-        <a
-          href="https://demo.dynamic.xyz/"
-          target="_blank"
-          rel="noreferrer"
-          className="p-4 inline-flex items-center justify-center border-2 border-[#3B3636] rounded-lg shadow-lg w-64"
-        >
-          <h2 className="font-semibold">Demo</h2>
-        </a>
-        <a
-          href="https://app.dynamic.xyz/"
-          target="_blank"
-          rel="noreferrer"
-          className="p-4 inline-flex items-center justify-center border-2 border-[#3B3636] rounded-lg shadow-lg w-64"
-        >
-          <h2 className="font-semibold">Dashboard</h2>
-        </a>
-      </div>
+    <div>
+      <ButtonAppBar />
+    <div className=" bg-gradient-to-b from-blue-900 to-black  text-white">
+    
+      <Box sx={{display: 'flex', padding: 2}}>
+          <Box sx={{ display: 'flex', flexGrow:  4, alignItems: 'flex-start', justifyContent : 'center'}}>
+            <ButtonGroup variant="contained" aria-label="Basic button group" >
+                <Button>Create Game</Button>
+                <Button>Join Game</Button>
+                <Button>Start Game</Button>
+                <Button>Start Over</Button>
+            </ButtonGroup>
+          </Box>
+      </Box>
+
+      <Box  sx={{display: 'inline-flex', padding: 6, m: 2 ,flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center'}}>
+        <Typography variant="h5" component="h2" display='flex'>
+            Your Card
+        </Typography>
+        <Box display='flex'>
+          <Image src={card}
+          width={100}
+          height={100}
+          alt="Picture of a Card"/>
+        </Box>
+
+        <Box display='flex'>
+          <Button variant="contained">Draw</Button>
+        </Box>
+        
+      </Box>
+      
+    </div>
     </div>
   );
 }
