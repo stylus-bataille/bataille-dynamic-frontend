@@ -1,4 +1,5 @@
 'use client';
+import * as React from 'react';
 import { Button , Box, ButtonGroup, Typography} from "@mui/material";
 import { DynamicWidget } from "../lib/dynamic";
 import ButtonAppBar from "./components/navbar";
@@ -7,9 +8,12 @@ import BoxCard from "./components/boxcard";
 
 
 export default function Main() {
+  const [GameID, setGameID] = React.useState(BigInt(0));
+  
+  console.log("current gameID", GameID);
   return (
     <div>
-      <ButtonAppBar />
+      <ButtonAppBar GameID={GameID} setGameID={setGameID}/>
     <div className=" bg-gradient-to-b from-pink-400 to-rose-900  text-white">
     
       

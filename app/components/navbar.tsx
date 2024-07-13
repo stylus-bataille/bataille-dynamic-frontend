@@ -46,9 +46,8 @@ const SimulateStartGame = async () => {
 
 
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar({GameID, setGameID}) {
   //state of component
-  const [GameID, setGameID] = React.useState(BigInt(0));
   const [open1, setOpen1] = React.useState(false); //modal1 state
   const [open2, setOpen2] = React.useState(false); //modal2 state
 
@@ -67,12 +66,17 @@ export default function ButtonAppBar() {
   const { chain, address } = useAccount();
 
   const { data: hash, error, isPending, isError, writeContract } = useWriteContract();
+  
   const { data: simulateData, failureReason } = useSimulateContract({
     abi,
     address: ContractAddress,
     functionName: 'startGame',
     args: [GameID],
   });
+
+  console.log("simulated data", simulateData);
+  console.log("failure reason", failureReason);
+
 
 
   const createGame = () => {
@@ -114,12 +118,6 @@ export default function ButtonAppBar() {
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ 
     hash, 
   });
-
-
-  console.log("Current Game ID", GameID);
-  console.log("simulated data", simulateData);
-  console.log("failure reason", failureReason);
-
   
 
   return (
