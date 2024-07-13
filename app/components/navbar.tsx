@@ -16,29 +16,7 @@ import {config} from "../../lib/wagmi";
 import { parse } from 'path';
 import {StyledInputRoot, StyledInputElement, StyledButton} from './numperInputStyle';
 
-/*
-const CreateGame = async () => {
-  const { data, error, isPending, isError, writeContract } = useWriteContract();
 
-  await writeContract({
-    abi,
-    address: '0xd5737bbe28a697f22cf2595c949a5c5a7e0ebb64',
-    functionName: 'createGame',
-    args: [],
-
-  });
-
-  const {isLoading: isConfirmed, isSuccess: isConfirmedSuccess} = useWaitForTransactionReceipt({hash: data});
-
-  return(
-    <div>
-      <Button sx={{backgroundColor: '#753D7B'}}  onClick={CreateGame}>
-          Create Game
-      </Button>
-    </div>
-  )
-}
-  */
 const ModalStyle = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -52,16 +30,36 @@ const ModalStyle = {
   justifyContent: 'center',
 };
 
+/*
+
+const SimulateStartGame = async () => {
+  const { request } = await simulateContract(config, {
+    abi,
+    address: 'ContractAddress',
+    functionName: 'startGame',
+    args: [GameID],
+  })
+  const hash = await writeContract(config, request)
+
+}
+*/
+
 
 
 export default function ButtonAppBar() {
   //state of component
   const [GameID, setGameID] = React.useState(BigInt(0));
-  const [open, setOpen] = React.useState(false); //modal state
+  const [open1, setOpen1] = React.useState(false); //modal1 state
+  const [open2, setOpen2] = React.useState(false); //modal2 state
+
 
   //modal fonctions
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  //modal1 = join game
+  const handleOpen1 = () => setOpen1(true);
+  const handleClose1 = () => setOpen1(false);
+
+  const handleOpen2 = () => setOpen2(true);
+  const handleClose2 = () => setOpen2(false);
 
 
 
@@ -69,6 +67,13 @@ export default function ButtonAppBar() {
   const { chain, address } = useAccount();
 
   const { data: hash, error, isPending, isError, writeContract } = useWriteContract();
+  const { data: simulateData, failureReason } = useSimulateContract({
+    abi,
+    address: ContractAddress,
+    functionName: 'startGame',
+    args: [GameID],
+  });
+
 
   const createGame = () => {
     writeContract({
@@ -90,6 +95,20 @@ export default function ButtonAppBar() {
     });
   }
 
+  const startGame = () => {
+    writeContract({
+      abi,
+      address: ContractAddress,
+      functionName: 'startGame',
+      account: address,
+      args: [GameID],
+    });
+  }
+
+  
+
+  
+
   
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ 
@@ -98,6 +117,8 @@ export default function ButtonAppBar() {
 
 
   console.log("Current Game ID", GameID);
+  console.log("simulated data", simulateData);
+  console.log("failure reason", failureReason);
 
   
 
@@ -117,10 +138,10 @@ export default function ButtonAppBar() {
             <ButtonGroup variant="contained" aria-label="Basic button group" color='secondary'>
                 <Button sx={{backgroundColor: '#753DA0'}} onClick={createGame}>Create Game</Button>
 
-                <Button sx={{backgroundColor: '#753DA0'}} onClick={handleOpen}>Join Game</Button>
+                <Button sx={{backgroundColor: '#753DA0'}} onClick={handleOpen1}>Join Game</Button>
                 <Modal
-                    open={open}
-                    onClose={handleClose}
+                    open={open1}
+                    onClose={handleClose1}
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                   >
@@ -145,7 +166,34 @@ export default function ButtonAppBar() {
                 </Modal>
 
 
-                <Button sx={{backgroundColor: '#753DCD'}}>Start Game</Button>
+                <Button sx={{backgroundColor: '#753DCD'}} onClick={handleOpen2}>Start Game</Button>
+                <Modal
+                    open={open2}
+                    onClose={handleClose2}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={ModalStyle}>
+                      <Typography id="modal-modal-title" variant="h6" component="h2" paddingBottom={2}>
+                        Please Enter Game ID
+                      </Typography>
+                      <NumberInput
+                          aria-label="Demo number input"
+                          placeholder="Type a number…"
+                          value={parseInt(GameID.toString())}
+                          onChange={(event, val) => setGameID(BigInt(val))}
+                          slots={{
+                            root: StyledInputRoot,
+                            input: StyledInputElement,
+                            incrementButton: StyledButton,
+                            decrementButton: StyledButton,
+                          }}
+                        />
+                      <Button onClick={startGame} sx={{marginTop: 2}}>Start Game</Button>
+                    </Box>
+                </Modal>
+
+
                 <Button sx={{backgroundColor: '#753DFE'}}>Start Over</Button>
             </ButtonGroup>
           </Box>
