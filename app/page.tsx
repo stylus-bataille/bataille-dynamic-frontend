@@ -10,20 +10,11 @@ export default function Main() {
   return (
     <div>
       <ButtonAppBar />
-    <div className=" bg-gradient-to-b from-blue-900 to-black  text-white">
+    <div className=" bg-gradient-to-b from-pink-400 to-rose-900  text-white">
     
-      <Box sx={{display: 'flex', padding: 2}}>
-          <Box sx={{ display: 'flex', flexGrow:  4, alignItems: 'flex-start', justifyContent : 'center'}}>
-            <ButtonGroup variant="contained" aria-label="Basic button group" >
-                <Button>Create Game</Button>
-                <Button>Join Game</Button>
-                <Button>Start Game</Button>
-                <Button>Start Over</Button>
-            </ButtonGroup>
-          </Box>
-      </Box>
+      
 
-      <Box sx={{display: 'flex', padding: 2, alignItems: 'flex-start', justifyContent : 'center'}}>
+      <Box sx={{display: 'flex', padding: 2, alignItems: 'flex-start', justifyContent : 'center', height: "100vh"}}>
           <BoxCard cardName="Your Card" buttonName="Draw" cardNumber={0} winner={true} onButtonClick={() => {}} />
 
           <BoxCard cardName="Opponent's Card" buttonName="Draw" cardNumber={48} buttonDisabled={true} onButtonClick={() => {}} />
@@ -32,8 +23,18 @@ export default function Main() {
 
       </Box>
      
-      
+      <Box sx={{display: 'flex', padding: 2, alignItems: 'flex-start', justifyContent : 'center'}}>
+          <Typography variant='h6' margin={1} color="#808080">
+            Made using 
+          </Typography>
+          <Image src="/logo/stylus_logo.png" alt="stylus" width={50} height={50} />
+          <Typography variant='h6' margin={1} color="#808080">
+            and
+          </Typography>
+          <Image src="/logo/logo.png" alt="dynamic" width={50} height={50} />
+      </Box>
     </div>
+
     </div>
   );
 }

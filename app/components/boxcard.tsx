@@ -110,7 +110,7 @@ interface BoxCardProps {
 const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,buttonDisabled,winner, onButtonClick }) => {
     
     const imagePath = cardPathMapping[cardNumber]; // Assuming cardPathMapping is the mapping object
-    console.log(imagePath);
+    
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, m: 1, border: '1px solid #ccc', borderRadius: '4px'}}>
             <Typography variant="h6" component="h3" sx={{ mb: 2 }}>
@@ -119,7 +119,7 @@ const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,butt
 
             <ImageDisplay number={cardNumber} />
 
-            <Button variant="contained" onClick={onButtonClick} sx={{marginY: 3}} disabled={buttonDisabled}>
+            <Button variant="contained" color='secondary' onClick={onButtonClick} sx={{marginY: 3}} disabled={buttonDisabled}>
                 {buttonName}
             </Button>
 

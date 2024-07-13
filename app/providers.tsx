@@ -10,8 +10,11 @@ import {
   EthereumWalletConnectors,
   DynamicWagmiConnector,
 } from "@/lib/dynamic";
+import { createTheme, alpha, getContrastRatio } from '@mui/material/styles';
+
 
 const queryClient = new QueryClient();
+
 
 export function Providers(props: { children: ReactNode }) {
   return (
