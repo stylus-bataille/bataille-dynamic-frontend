@@ -41,7 +41,7 @@ export default function Main() {
   const drandFetch = async(DrandNumber) => {
    
     const options = {
-        disableBeaconVerification: false, // `true` disables checking of signatures on beacons - faster but insecure!!!
+        disableBeaconVerification: true, // `true` disables checking of signatures on beacons - faster but insecure!!!
         noCache: false, // `true` disables caching when retrieving beacons for some providers
         chainVerificationParams: { chainHash, publicKey }  // these are optional, but recommended! They are compared for parity against the `/info` output of a given node
     }
@@ -49,10 +49,10 @@ export default function Main() {
     // if you want to connect to a single chain to grab the latest beacon you can simply do the following
     // note: if you want to access e.g. quicknet you must use 'https://api.drand.sh/52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971'
     // passing the chainHash in the `chainVerificationParams` will not fill in the path for you (unless using `MultiBeaconNode`)
-    const chain = new HttpCachingChain('https://api.drand.sh', options)
+    const chain = new HttpCachingChain('https://api.drand.sh/52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971', options)
     const client = new HttpChainClient(chain, options)
     const RightBeacon = await fetchBeacon(client, DrandNumber)
-
+    console.log("Right Beacon", RightBeacon.signature);
     setDrandHash(RightBeacon.signature);
 
    
@@ -88,7 +88,7 @@ export default function Main() {
   
   console.log("current drandHash", drandHash);
   console.log("current gameID", GameID);
-  
+
   return (
     <div>
       <ButtonAppBar GameID={GameID} setGameID={setGameID} hasGameStarted={hasGameStarted} setHasGameStarted={setHasGameStarted}/>
