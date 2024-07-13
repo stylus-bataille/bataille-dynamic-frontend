@@ -1,8 +1,9 @@
+'use client';
 import { Button , Box, ButtonGroup, Typography} from "@mui/material";
 import { DynamicWidget } from "../lib/dynamic";
 import ButtonAppBar from "./components/navbar";
 import Image from 'next/image';
-import card from './images/SVG-cards-1.3/10_of_clubs.svg';
+import BoxCard from "./components/boxcard";
 
 
 export default function Main() {
@@ -22,22 +23,11 @@ export default function Main() {
           </Box>
       </Box>
 
-      <Box  sx={{display: 'inline-flex', padding: 6, m: 2 ,flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center'}}>
-        <Typography variant="h5" component="h2" display='flex'>
-            Your Card
-        </Typography>
-        <Box display='flex'>
-          <Image src={card}
-          width={100}
-          height={100}
-          alt="Picture of a Card"/>
-        </Box>
+      
+      <BoxCard cardName="Your Card" buttonName="Draw" cardNumber={0} onButtonClick={() => {}} />
 
-        <Box display='flex'>
-          <Button variant="contained">Draw</Button>
-        </Box>
-        
-      </Box>
+
+      <BoxCard cardName="Opponent's Card" buttonName="Draw" cardNumber={48} onButtonClick={() => {}} />
       
     </div>
     </div>
