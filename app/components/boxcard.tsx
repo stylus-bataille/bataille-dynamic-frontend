@@ -1,7 +1,9 @@
 'use client';
 import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
-import ImageSourcePropType from 'next/image';
+import { Box, Button, Typography, Alert} from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import DangerousIcon from '@mui/icons-material/Dangerous';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 
@@ -100,22 +102,34 @@ interface BoxCardProps {
     cardName: string;
     buttonName: string;
     cardNumber: CardNumber;
+    buttonDisabled?: boolean;
+    winner?: boolean;
     onButtonClick: () => void;
 }
 
-const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber, onButtonClick }) => {
+const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,buttonDisabled,winner, onButtonClick }) => {
     
     const imagePath = cardPathMapping[cardNumber]; // Assuming cardPathMapping is the mapping object
     console.log(imagePath);
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, m: 1, border: '1px solid #ccc', borderRadius: '4px' }}>
-        <Typography variant="h6" component="h3" sx={{ mb: 2 }}>
-            {cardName}
-        </Typography>
-        <ImageDisplay number={cardNumber} />
-        <Button variant="contained" onClick={onButtonClick}>
-            {buttonName}
-        </Button>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, m: 1, border: '1px solid #ccc', borderRadius: '4px'}}>
+            <Typography variant="h6" component="h3" sx={{ mb: 2 }}>
+                {cardName}
+            </Typography>
+
+            <ImageDisplay number={cardNumber} />
+
+            <Button variant="contained" onClick={onButtonClick} sx={{marginY: 3}} disabled={buttonDisabled}>
+                {buttonName}
+            </Button>
+
+            {winner ? 
+            <Alert icon={<EmojiEventsIcon fontSize='medium'/>} severity="success">
+                You won the round! 
+            </Alert>: 
+            <Alert icon={<DangerousIcon fontSize="medium" />} severity="error">
+                You lost this round
+            </Alert>}
         </Box>
   );
 };

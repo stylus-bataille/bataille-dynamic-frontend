@@ -23,11 +23,15 @@ export default function Main() {
           </Box>
       </Box>
 
-      
-      <BoxCard cardName="Your Card" buttonName="Draw" cardNumber={0} onButtonClick={() => {}} />
+      <Box sx={{display: 'flex', padding: 2, alignItems: 'flex-start', justifyContent : 'center'}}>
+          <BoxCard cardName="Your Card" buttonName="Draw" cardNumber={0} winner={true} onButtonClick={() => {}} />
 
+          <BoxCard cardName="Opponent's Card" buttonName="Draw" cardNumber={48} buttonDisabled={true} onButtonClick={() => {}} />
 
-      <BoxCard cardName="Opponent's Card" buttonName="Draw" cardNumber={48} onButtonClick={() => {}} />
+          <BoxCard cardName="Opponent's Card" buttonName="Draw" cardNumber={48} buttonDisabled={true} onButtonClick={() => {}} />
+
+      </Box>
+     
       
     </div>
     </div>
