@@ -108,7 +108,7 @@
     "@babel/parser" "^7.24.7"
     "@babel/types" "^7.24.7"
 
-"@babel/traverse@^7.24.7":
+"@babel/traverse@^7.23.2", "@babel/traverse@^7.24.7":
   version "7.24.8"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.24.8.tgz#6c14ed5232b7549df3371d820fbd9abfcd7dfab7"
   integrity sha512-t0P1xxAPzEDcEPmjprAQq19NWum4K0EQPjMwZQZbHt+GiZqvjCHjj755Weq1YRPVzBI+3zSfvScfpnuIecVFJQ==
@@ -3070,6 +3070,15 @@ dom-helpers@^5.0.1:
   dependencies:
     "@babel/runtime" "^7.8.7"
     csstype "^3.0.2"
+
+drand-client@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/drand-client/-/drand-client-1.2.6.tgz#91e88e17f99ab5d3982ad9d39c37d562dce42fc9"
+  integrity sha512-qt0U/84ocWnVx8eImqbx23jnG5uYDc+wK5HBtHJDe9JYLzgqjIx47MF6dSJjlR8BpDB0Q8J76c4Kt9z2X/X9Mg==
+  dependencies:
+    "@babel/traverse" "^7.23.2"
+    "@noble/curves" "^1.4.0"
+    buffer "^6.0.3"
 
 duplexify@^4.1.2:
   version "4.1.3"

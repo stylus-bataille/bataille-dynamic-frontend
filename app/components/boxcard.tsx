@@ -8,6 +8,7 @@ import Image from 'next/image';
 import PropTypes from 'prop-types';
 import { useAccount, useWriteContract } from 'wagmi';
 import { abi, ContractAddress } from "../abi/bataille_abi";
+import { BytesSizeMismatchError } from 'viem';
 
 
 // Define the base path for the card images
@@ -107,15 +108,19 @@ interface BoxCardProps {
     buttonDisabled?: boolean;
     winner?: boolean;
     gameID: bigint;
+    drandSignature: string;
     onButtonClick: () => void;
 }
 
-const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,buttonDisabled,winner,gameID, onButtonClick }) => {
+const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,buttonDisabled,winner,gameID,drandSignature, onButtonClick }) => {
     //wagmi hooks
     const { chain, address } = useAccount();
     const { data: hash, error, isPending, isError, writeContract } = useWriteContract();
 
     const draw = () => {
+        //execute passed fonction
+        onButtonClick();
+
         writeContract({
           abi,
           address: ContractAddress,
@@ -123,9 +128,10 @@ const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,butt
           account: address,
           args: [
             gameID,
-            hash,
+            drandSignature,
           ],
         });
+
       }
 
     const imagePath = cardPathMapping[cardNumber]; // Assuming cardPathMapping is the mapping object

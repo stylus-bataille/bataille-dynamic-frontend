@@ -46,7 +46,7 @@ const SimulateStartGame = async () => {
 
 
 
-export default function ButtonAppBar({GameID, setGameID}) {
+export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasGameStarted}) {
   //state of component
   const [open1, setOpen1] = React.useState(false); //modal1 state
   const [open2, setOpen2] = React.useState(false); //modal2 state
@@ -107,6 +107,8 @@ export default function ButtonAppBar({GameID, setGameID}) {
       account: address,
       args: [GameID],
     });
+
+    setHasGameStarted(true);
   }
 
   
@@ -134,9 +136,9 @@ export default function ButtonAppBar({GameID, setGameID}) {
 
           <Box sx={{ display: 'flex', flexGrow:  1, alignItems: 'flex-start', justifyContent : 'center'}}>
             <ButtonGroup variant="contained" aria-label="Basic button group" color='secondary'>
-                <Button sx={{backgroundColor: '#753DA0'}} onClick={createGame}>Create Game</Button>
+                <Button sx={{backgroundColor: '#753DA0'}} onClick={createGame} disabled={hasGameStarted}>Create Game</Button>
 
-                <Button sx={{backgroundColor: '#753DA0'}} onClick={handleOpen1}>Join Game</Button>
+                <Button sx={{backgroundColor: '#753DA0'}} onClick={handleOpen1} disabled={hasGameStarted}>Join Game</Button>
                 <Modal
                     open={open1}
                     onClose={handleClose1}
