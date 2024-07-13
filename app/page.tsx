@@ -19,7 +19,7 @@ export default function Main() {
       
 
       <Box sx={{display: 'flex', padding: 2, alignItems: 'flex-start', justifyContent : 'center', height: "100vh"}}>
-          <BoxCard cardName="Your Card" buttonName="Draw" cardNumber={0} winner={true} onButtonClick={() => {}} />
+          <BoxCard cardName="Your Card" buttonName="Draw" cardNumber={0} winner={true} gameID={GameID} onButtonClick={() => {}} />
 
           <BoxCard cardName="Opponent's Card" buttonName="Draw" cardNumber={48} buttonDisabled={true} onButtonClick={() => {}} />
 

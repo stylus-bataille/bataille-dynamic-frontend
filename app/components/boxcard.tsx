@@ -6,6 +6,8 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import DangerousIcon from '@mui/icons-material/Dangerous';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
+import { useAccount, useWriteContract } from 'wagmi';
+import { abi, ContractAddress } from "../abi/bataille_abi";
 
 
 // Define the base path for the card images
@@ -104,11 +106,28 @@ interface BoxCardProps {
     cardNumber: CardNumber;
     buttonDisabled?: boolean;
     winner?: boolean;
+    gameID: bigint;
     onButtonClick: () => void;
 }
 
-const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,buttonDisabled,winner, onButtonClick }) => {
-    
+const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,buttonDisabled,winner,gameID, onButtonClick }) => {
+    //wagmi hooks
+    const { chain, address } = useAccount();
+    const { data: hash, error, isPending, isError, writeContract } = useWriteContract();
+
+    const draw = () => {
+        writeContract({
+          abi,
+          address: ContractAddress,
+          functionName: 'draw',
+          account: address,
+          args: [
+            gameID,
+            hash,
+          ],
+        });
+      }
+
     const imagePath = cardPathMapping[cardNumber]; // Assuming cardPathMapping is the mapping object
     
     return (
@@ -119,7 +138,7 @@ const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,butt
 
             <ImageDisplay number={cardNumber} />
 
-            <Button variant="contained" color='secondary' onClick={onButtonClick} sx={{marginY: 3}} disabled={buttonDisabled}>
+            <Button variant="contained" color='secondary' onClick={draw} sx={{marginY: 3}} disabled={buttonDisabled} >
                 {buttonName}
             </Button>
 
