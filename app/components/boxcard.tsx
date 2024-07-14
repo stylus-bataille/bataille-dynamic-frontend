@@ -1,12 +1,12 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, Typography, Alert} from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import DangerousIcon from '@mui/icons-material/Dangerous';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-import { simulateContract, writeContract } from '@wagmi/core'
+import { simulateContract, writeContract, readContract } from '@wagmi/core'
 
 import { useAccount, useWriteContract, useReadContract, useSimulateContract } from 'wagmi';
 import { abi, ContractAddress } from "../abi/bataille_abi";
@@ -115,19 +115,15 @@ ImageDisplay.propTypes = {
 interface BoxCardProps {
     cardName: string;
     buttonName: string;
-    cardNumber: CardNumber;
     buttonDisabled?: boolean;
-    winner?: boolean;
+    cardNumber: number;
     gameID: bigint;
-    drandSignature: string;
-    onButtonClick: () => void;
+    
 }
 
-const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,buttonDisabled,winner,gameID,drandSignature, onButtonClick }) => {
+const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName,buttonDisabled,cardNumber,gameID }) => {
     const [drandHash, setDrandHash] = React.useState('');
-    let encoder = new TextEncoder();
 
-    
     //wagmi hooks
     const { chain, address } = useAccount();
     const { data: hash, error, isPending, isError, writeContract } = useWriteContract();
@@ -168,7 +164,7 @@ const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,butt
         console.log()
 
         console.log("skibidi");
-        /*
+        
         writeContract({
             abi,
             address: ContractAddress,
@@ -179,18 +175,6 @@ const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,butt
               `0x${(RightBeacon.signature)}`,
             ],
           });
-        */
-        const { request, result } = simulateContract(config, {
-            abi,
-            address: ContractAddress,
-            functionName: 'draw',
-            args: [
-                gameID,
-                `0x${RightBeacon.signature}`,
-              ],
-          })
-        //const hash = await writeContract(config, request)
-        console.log("hash of simulated tx", request);
     }
 
    
@@ -221,48 +205,38 @@ const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,butt
     }
     }
 
-    const draw = () => {
-        writeContract({
-          abi,
-          address: ContractAddress,
-          functionName: 'draw',
-          account: address,
-          args: [
-            gameID,
-            `0x${drandHash}`,
-          ],
-        });
+       
 
-      }
-
-    const imagePath = cardPathMapping[cardNumber]; // Assuming cardPathMapping is the mapping object
+  
     console.log("current gameID", gameID);
 
-    return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, m: 1, border: '1px solid #ccc', borderRadius: '4px'}}>
-            <Button onClick={() => drandFetch(DrandNumber.data).catch((error) => console.error(error))} variant="contained" color='secondary' sx={{marginY: 3}}>
-                fetch Drand Number
-            </Button>
-            
-            <Typography variant="h6" component="h3" sx={{ mb: 2 }}>
-                {cardName}
-            </Typography>
+    return(
+       
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, m: 1, border: '1px solid #ccc', borderRadius: '4px'}}>
+                    <Button onClick={() => drandFetch(DrandNumber.data).catch((error) => console.error(error))} variant="contained" color='secondary' sx={{marginY: 3}} disabled={buttonDisabled}>
+                        fetch Drand Number
+                    </Button>
+                    
+                    <Typography variant="h6" component="h3" sx={{ mb: 2 }}>
+                        {cardName}
+                    </Typography>
 
-            <ImageDisplay number={cardNumber} />
+                    <ImageDisplay number={cardNumber} />
 
-            <Button variant="contained" color='secondary' onClick={() => drandFetch(DrandNumber.data).catch((error) => console.error(error))} sx={{marginY: 3}} disabled={buttonDisabled}>
-                {buttonName}
-            </Button>
+                    <Button variant="contained" color='secondary' onClick={() => drandFetch(DrandNumber.data).catch((error) => console.error(error))} sx={{marginY: 3}} >
+                        {buttonName}
+                    </Button>
 
-            {winner ? 
-            <Alert icon={<EmojiEventsIcon fontSize='medium'/>} severity="success">
-                You won the round! 
-            </Alert>: 
-            <Alert icon={<DangerousIcon fontSize="medium" />} severity="error">
-                You lost this round
-            </Alert>}
-        </Box>
-  );
+                    {cardNumber == 0%13 ? 
+                    <Alert icon={<EmojiEventsIcon fontSize='medium'/>} severity="success">
+                        You won the game! 
+                    </Alert>: 
+                    <Alert icon={<DangerousIcon fontSize="medium" />} severity="error">
+                        You lost this time
+                    </Alert>}
+                </Box>
+           
+    )
 };
 
 export default BoxCard;

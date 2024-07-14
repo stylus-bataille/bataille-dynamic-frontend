@@ -74,8 +74,6 @@ export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasG
     args: [GameID],
   });
 
-  console.log("simulated data", simulateData);
-  console.log("failure reason", failureReason);
 
 
 
@@ -89,15 +87,7 @@ export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasG
     });
   }
 
-  const joinGame = () => {
-    writeContract({
-      abi,
-      address: ContractAddress,
-      functionName: 'joinGame',
-      account: address,
-      args: [GameID],
-    });
-  }
+ 
 
   const startGame = () => {
     writeContract({
@@ -138,32 +128,7 @@ export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasG
             <ButtonGroup variant="contained" aria-label="Basic button group" color='secondary'>
                 <Button sx={{backgroundColor: '#753DA0'}} onClick={createGame} disabled={hasGameStarted}>Create Game</Button>
 
-                <Button sx={{backgroundColor: '#753DA0'}} onClick={handleOpen1} disabled={hasGameStarted}>Join Game</Button>
-                <Modal
-                    open={open1}
-                    onClose={handleClose1}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                  >
-                    <Box sx={ModalStyle}>
-                      <Typography id="modal-modal-title" variant="h6" component="h2" paddingBottom={2}>
-                        Please Enter Game ID
-                      </Typography>
-                      <NumberInput
-                          aria-label="Demo number input"
-                          placeholder="Type a number…"
-                          value={parseInt(GameID.toString())}
-                          onChange={(event, val) => setGameID(BigInt(val))}
-                          slots={{
-                            root: StyledInputRoot,
-                            input: StyledInputElement,
-                            incrementButton: StyledButton,
-                            decrementButton: StyledButton,
-                          }}
-                        />
-                      <Button onClick={joinGame} sx={{marginTop: 2}}>Join Game</Button>
-                    </Box>
-                </Modal>
+                
 
 
                 <Button sx={{backgroundColor: '#753DCD'}} onClick={handleOpen2}>Start Game</Button>
@@ -194,7 +159,6 @@ export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasG
                 </Modal>
 
 
-                <Button sx={{backgroundColor: '#753DFE'}}>Start Over</Button>
             </ButtonGroup>
           </Box>
           <DynamicWidget />

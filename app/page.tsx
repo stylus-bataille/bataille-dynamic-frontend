@@ -13,33 +13,59 @@ import {
   HttpCachingChain, 
   FastestNodeClient, 
   MultiBeaconNode } from 'drand-client'
-import {useReadContract} from 'wagmi';
+import {useAccount, useReadContract} from 'wagmi';
 import { abi, ContractAddress } from "./abi/bataille_abi";
 import { drandFetch } from './components/drand';
+import { useEffect } from 'react';
+import { type UseReadContractReturnType } from 'wagmi'
+
+
+
 
 export default function Main() {
   //game Id state to be passed to the Children component
   const [GameID, setGameID] = React.useState(BigInt(0));
   const [hasGameStarted, setHasGameStarted] = React.useState(false);
+  const [cardNumber, setCardNumber] = React.useState(1);
+  const {address} = useAccount();
 
-  console.log("current gameID", GameID);
+
+    console.log("current gameID", GameID);
+
+    const cardNumberDrawn = useReadContract({
+      abi,
+      address: ContractAddress,
+      functionName: 'latestCard',
+      account: address,
+      args: [],
+    })
+
+
+  useEffect(() => {
+      setCardNumber(cardNumberDrawn.data);
+      console.log("cardsDrawn", cardNumberDrawn.data);
+  }, [cardNumberDrawn.data]); 
 
   return (
+    
     <div>
       <ButtonAppBar GameID={GameID} setGameID={setGameID} hasGameStarted={hasGameStarted} setHasGameStarted={setHasGameStarted}/>
     <div className=" bg-gradient-to-b from-pink-400 to-rose-900  text-white">
-    
-      
-
+      <Typography variant='h6'  color="#808080" align="center">
+        Draw an Ace to win!
+      </Typography>
+     
+        
       <Box sx={{display: 'flex', padding: 2, alignItems: 'flex-start', justifyContent : 'center', height: "100vh"}}>
-          <BoxCard cardName="Your Card" buttonName="Draw" cardNumber={0} winner={true} gameID={GameID} />
-
-          <BoxCard cardName="Opponent's Card" buttonName="Draw" cardNumber={48} buttonDisabled={true} gameID={GameID}  />
-
-          <BoxCard cardName="Opponent's Card" buttonName="Draw" cardNumber={48} buttonDisabled={true} gameID={GameID}  />
+          <BoxCard cardName="Current Card" buttonName="Draw" cardNumber={cardNumber} gameID={GameID} buttonDisabled={true}/>
 
       </Box>
      
+     
+           
+          
+      
+      
       <Box sx={{display: 'flex', padding: 2, alignItems: 'flex-start', justifyContent : 'center'}}>
           <Typography variant='h6' margin={1} color="#808080">
             Made using 
@@ -51,7 +77,7 @@ export default function Main() {
           <Image src="/logo/logo.png" alt="dynamic" width={50} height={50} />
       </Box>
     </div>
-
+        
     </div>
   );
 }
