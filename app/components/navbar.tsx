@@ -34,7 +34,7 @@ const ModalStyle = {
 
 
 
-export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasGameStarted}) {
+export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasGameStarted}: {GameID: any, setGameID: any, hasGameStarted: any, setHasGameStarted: any}) {
   //state of component
   const [open2, setOpen2] = React.useState(false); //modal2 state
 
@@ -124,8 +124,8 @@ export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasG
                           aria-label="Demo number input"
                           placeholder="Type a number…"
                           value={parseInt(GameID.toString())}
-                          onChange={(event, val) => setGameID(BigInt(val))}
-                          slots={{
+                          onChange={(event, val) => setGameID(BigInt(!val))}
+                          slotProps={{
                             root: StyledInputRoot,
                             input: StyledInputElement,
                             incrementButton: StyledButton,

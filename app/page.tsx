@@ -42,7 +42,7 @@ export default function Main() {
 
 
   useEffect(() => {
-      setCardNumber(cardNumberDrawn.data);
+      setCardNumber(cardNumberDrawn.data as number);
       console.log("cardsDrawn", cardNumberDrawn.data);
   }, [cardNumberDrawn.data]); 
 

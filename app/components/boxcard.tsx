@@ -137,7 +137,6 @@ const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName,buttonDisabled,c
     })
     useEffect(() => {
         console.log("current DrandNumber", DrandNumber.data);
-        console.log("current Drand Hash", drandHash);
     }, [DrandNumber.data]);
 
     //drand logic
@@ -145,7 +144,7 @@ const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName,buttonDisabled,c
     const publicKey = '83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a' // (hex encoded)
 
     //drand fetch function
-    const drandFetch = async(DrandNumber) => {
+    const drandFetch = async (DrandNumber: any) => {
    
             const options = {
                 disableBeaconVerification: true, // `true` disables checking of signatures on beacons - faster but insecure!!!
