@@ -63,6 +63,9 @@ export default function Main() {
         Warning: Due to some Unknown Problems, Card Update Might take a while (arround 1 to 2 minutes) after Draw
       </Typography>
       <Typography variant='h6'  color="#E59FEB" align="center">
+        Either Normal Refresh (F5) or Hard Refresh (Ctrl + F5) the page to see the updated card
+      </Typography>
+      <Typography variant='h6'  color="#E59FEB" align="center">
         Also: If Dynamic Wallet is not working, please try to hard refresh the page
       </Typography>
      

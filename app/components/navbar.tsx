@@ -5,15 +5,9 @@ import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberIn
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import { DynamicWidget } from '@dynamic-labs/sdk-react-core';
-import Image from 'next/image';
-import { grey } from '@mui/material/colors';
 import { useSimulateContract, useAccount, useWriteContract, useWaitForTransactionReceipt, createConfig } from 'wagmi'
 import { abi, ContractAddress } from "../abi/bataille_abi";
-import {config} from "../../lib/wagmi";
-import { parse } from 'path';
 import {StyledInputRoot, StyledInputElement, StyledButton} from './numperInputStyle';
 import CasinoIcon from '@mui/icons-material/Casino';
 
