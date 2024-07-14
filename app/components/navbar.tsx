@@ -15,7 +15,7 @@ import { abi, ContractAddress } from "../abi/bataille_abi";
 import {config} from "../../lib/wagmi";
 import { parse } from 'path';
 import {StyledInputRoot, StyledInputElement, StyledButton} from './numperInputStyle';
-
+import CasinoIcon from '@mui/icons-material/Casino';
 
 const ModalStyle = {
   position: 'absolute' as 'absolute',
@@ -30,33 +30,16 @@ const ModalStyle = {
   justifyContent: 'center',
 };
 
-/*
 
-const SimulateStartGame = async () => {
-  const { request } = await simulateContract(config, {
-    abi,
-    address: 'ContractAddress',
-    functionName: 'startGame',
-    args: [GameID],
-  })
-  const hash = await writeContract(config, request)
-
-}
-*/
 
 
 
 export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasGameStarted}) {
   //state of component
-  const [open1, setOpen1] = React.useState(false); //modal1 state
   const [open2, setOpen2] = React.useState(false); //modal2 state
 
 
   //modal fonctions
-  //modal1 = join game
-  const handleOpen1 = () => setOpen1(true);
-  const handleClose1 = () => setOpen1(false);
-
   const handleOpen2 = () => setOpen2(true);
   const handleClose2 = () => setOpen2(false);
 
@@ -74,9 +57,6 @@ export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasG
     args: [GameID],
   });
 
-
-
-
   const createGame = () => {
     writeContract({
       abi,
@@ -87,7 +67,6 @@ export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasG
     });
   }
 
- 
 
   const startGame = () => {
     writeContract({
@@ -100,11 +79,6 @@ export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasG
 
     setHasGameStarted(true);
   }
-
-  
-
-  
-
   
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ 
@@ -113,18 +87,22 @@ export default function ButtonAppBar({GameID, setGameID, hasGameStarted, setHasG
   
 
   return (
-    <Box sx={{ flexGrow: 1 , backgroundColor : '#000000'}} bgcolor="#000000">
+    <Box sx={{ flexGrow: 2 , backgroundColor : '#000000'}} bgcolor="#000000">
       <AppBar position="static">
         <Toolbar sx={{backgroundColor : '#D4A1D9' }}>
           
 
-          
-          <Typography variant="h4" component="div" >
-            Bataille
+          <CasinoIcon fontSize='large'>h
+          </CasinoIcon>
+          <Typography variant="h4" component="div" marginLeft={2}>
+            Lucky Draw
           </Typography>
           
 
-          <Box sx={{ display: 'flex', flexGrow:  1, alignItems: 'flex-start', justifyContent : 'center'}}>
+
+          
+
+          <Box sx={{ display: 'flex', flexGrow:  2, alignItems: 'center', justifyContent : 'center', marginLeft: 4}}>
             <ButtonGroup variant="contained" aria-label="Basic button group" color='secondary'>
                 <Button sx={{backgroundColor: '#753DA0'}} onClick={createGame} disabled={hasGameStarted}>Create Game</Button>
 
