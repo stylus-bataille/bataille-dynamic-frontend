@@ -51,7 +51,7 @@ export default function Main() {
     <div>
       <ButtonAppBar GameID={GameID} setGameID={setGameID} hasGameStarted={hasGameStarted} setHasGameStarted={setHasGameStarted}/>
     <div className=" bg-gradient-to-b from-pink-400 to-rose-900  text-white">
-      <Typography variant='h6'  color="#781581" align="center">
+      <Typography variant='h6'  color="#781581" align="center" paddingTop={2}>
         Draw an Ace to win!
       </Typography>
       
@@ -61,7 +61,10 @@ export default function Main() {
       </Box>
 
       <Typography variant='h6'  color="#E59FEB" align="center">
-        Warning: Due to some Unknown Problems, Card Update Might take a while (arround 1 to 2 minutes)
+        Warning: Due to some Unknown Problems, Card Update Might take a while (arround 1 to 2 minutes) after Draw
+      </Typography>
+      <Typography variant='h6'  color="#E59FEB" align="center">
+        Also: If Dynamic Wallet is not working, please try to hard refresh the page
       </Typography>
      
       <Box sx={{display: 'flex', padding: 2, alignItems: 'flex-start', justifyContent : 'center'}}>
