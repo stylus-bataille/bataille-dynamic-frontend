@@ -6,9 +6,20 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import DangerousIcon from '@mui/icons-material/Dangerous';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-import { useAccount, useWriteContract } from 'wagmi';
+import { simulateContract, writeContract } from '@wagmi/core'
+
+import { useAccount, useWriteContract, useReadContract, useSimulateContract } from 'wagmi';
 import { abi, ContractAddress } from "../abi/bataille_abi";
 import { BytesSizeMismatchError } from 'viem';
+import { 
+    fetchBeacon, 
+    fetchBeaconByTime, 
+    HttpChainClient, 
+    watch, 
+    HttpCachingChain, 
+    FastestNodeClient, 
+    MultiBeaconNode } from 'drand-client';
+    import { config } from "@/lib/wagmi";
 
 
 // Define the base path for the card images
@@ -113,14 +124,104 @@ interface BoxCardProps {
 }
 
 const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,buttonDisabled,winner,gameID,drandSignature, onButtonClick }) => {
+    const [drandHash, setDrandHash] = React.useState('');
+    let encoder = new TextEncoder();
+
+    
     //wagmi hooks
     const { chain, address } = useAccount();
     const { data: hash, error, isPending, isError, writeContract } = useWriteContract();
 
-    const draw = () => {
-        //execute passed fonction
-        onButtonClick();
+    //read Drand Number from contract (verified with the help of Stylus)
+    const DrandNumber = useReadContract({
+        abi,
+        address: ContractAddress,
+        functionName: 'nextDrandRound',
+        args: [gameID],
+    })
 
+    console.log("current DrandNumber", DrandNumber.data);
+
+    //drand logic
+    const chainHash = '52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971' // (hex encoded)
+    const publicKey = '83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a' // (hex encoded)
+
+        //drand fetch function
+    const drandFetch = async(DrandNumber) => {
+   
+    const options = {
+        disableBeaconVerification: true, // `true` disables checking of signatures on beacons - faster but insecure!!!
+        noCache: false, // `true` disables caching when retrieving beacons for some providers
+        chainVerificationParams: { chainHash, publicKey }  // these are optional, but recommended! They are compared for parity against the `/info` output of a given node
+    }
+
+    // if you want to connect to a single chain to grab the latest beacon you can simply do the following
+    // note: if you want to access e.g. quicknet you must use 'https://api.drand.sh/52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971'
+    // passing the chainHash in the `chainVerificationParams` will not fill in the path for you (unless using `MultiBeaconNode`)
+    const chain = new HttpCachingChain('https://api.drand.sh/52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971', options)
+    const client = new HttpChainClient(chain, options)
+    const RightBeacon = await fetchBeacon(client, DrandNumber)
+    setDrandHash(RightBeacon.signature);
+
+    if (RightBeacon.signature != '') {
+        console.log("Right Beacon bytes", (RightBeacon.signature));
+        console.log()
+
+        console.log("skibidi");
+        /*
+        writeContract({
+            abi,
+            address: ContractAddress,
+            functionName: 'draw',
+            account: address,
+            args: [
+              gameID,
+              `0x${(RightBeacon.signature)}`,
+            ],
+          });
+        */
+        const { request, result } = simulateContract(config, {
+            abi,
+            address: ContractAddress,
+            functionName: 'draw',
+            args: [
+                gameID,
+                `0x${RightBeacon.signature}`,
+              ],
+          })
+        //const hash = await writeContract(config, request)
+        console.log("hash of simulated tx", request);
+    }
+
+   
+    // if you're happy to get randomness from many APIs and automatically use the fastest
+    // you can construct a `FastestNodeClient` with multiple URLs
+    // note: the randomness beacons are cryptographically verifiable, so as long as you fill
+    // in the `chainVerificationParams` in the options, you don't need to worry about malicious 
+    // providers sending you fake randomness!
+    const urls = [
+        'https://api.drand.sh/52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971',
+        'https://drand.cloudflare.com/52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971'
+        // ...
+    ]
+    const fastestNodeClient = new FastestNodeClient(urls, options)
+    // don't forget to start the client, or it won't periodically optimise for the fastest node!
+    fastestNodeClient.start()
+    
+    // don't forget to stop the speed testing, or you may leak a `setInterval` call!
+    fastestNodeClient.stop()
+
+    // you can also use the `watch` async generator to watch the latest randomness automatically!
+    // use an abort controller to stop it
+    const abortController = new AbortController()
+    for await (const beacon of watch(client, abortController)) {
+        if (beacon.round === 10) {
+            abortController.abort('round 10 reached - listening stopped')
+        }
+    }
+    }
+
+    const draw = () => {
         writeContract({
           abi,
           address: ContractAddress,
@@ -128,23 +229,28 @@ const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName, cardNumber,butt
           account: address,
           args: [
             gameID,
-            drandSignature,
+            `0x${drandHash}`,
           ],
         });
 
       }
 
     const imagePath = cardPathMapping[cardNumber]; // Assuming cardPathMapping is the mapping object
-    
+    console.log("current gameID", gameID);
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2, m: 1, border: '1px solid #ccc', borderRadius: '4px'}}>
+            <Button onClick={() => drandFetch(DrandNumber.data).catch((error) => console.error(error))} variant="contained" color='secondary' sx={{marginY: 3}}>
+                fetch Drand Number
+            </Button>
+            
             <Typography variant="h6" component="h3" sx={{ mb: 2 }}>
                 {cardName}
             </Typography>
 
             <ImageDisplay number={cardNumber} />
 
-            <Button variant="contained" color='secondary' onClick={draw} sx={{marginY: 3}} disabled={buttonDisabled} >
+            <Button variant="contained" color='secondary' onClick={() => drandFetch(DrandNumber.data).catch((error) => console.error(error))} sx={{marginY: 3}} disabled={buttonDisabled}>
                 {buttonName}
             </Button>
 
