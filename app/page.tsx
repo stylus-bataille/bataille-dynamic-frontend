@@ -15,7 +15,6 @@ import {
   MultiBeaconNode } from 'drand-client'
 import {useAccount, useReadContract} from 'wagmi';
 import { abi, ContractAddress } from "./abi/bataille_abi";
-import { drandFetch } from './components/drand';
 import { useEffect } from 'react';
 import { type UseReadContractReturnType } from 'wagmi'
 

@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
 import { Box, Button, Typography, Alert} from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import DangerousIcon from '@mui/icons-material/Dangerous';
 import Image from 'next/image';
@@ -10,7 +9,6 @@ import { simulateContract, writeContract, readContract } from '@wagmi/core'
 
 import { useAccount, useWriteContract, useReadContract, useSimulateContract } from 'wagmi';
 import { abi, ContractAddress } from "../abi/bataille_abi";
-import { BytesSizeMismatchError } from 'viem';
 import { 
     fetchBeacon, 
     fetchBeaconByTime, 
