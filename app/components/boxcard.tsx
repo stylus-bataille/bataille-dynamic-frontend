@@ -219,7 +219,7 @@ const BoxCard: React.FC<BoxCardProps> = ({ cardName, buttonName,buttonDisabled,c
                         {buttonName}
                     </Button>
 
-                    {cardNumber == 0%13 ? 
+                    {(cardNumber % 13) == 0 ? 
                     <Alert icon={<EmojiEventsIcon fontSize='medium'/>} severity="success">
                         You won the game! 
                     </Alert>: 
